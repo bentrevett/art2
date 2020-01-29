@@ -2,10 +2,15 @@ import matplotlib.image as mpimg
 import numpy as np
 import argparse
 
-parser = argparse.ArgumentParser(description='Take in an image, calculate a markov chain over each channel, generate an image from that markov chain')
-parser.add_argument('-path', type=str, default='iceberg.jpg',
+parser = argparse.ArgumentParser(description='Take in an image, calculate a Markov chain over each channel, generate an image from that Markov chain')
+parser.add_argument('--path', type=str, required=True,
                     help='path to the image')
+parser.add_argument('--seed', type=int, default=None,
+                    help='random seed')
 args = parser.parse_args()
+
+if args.seed is not None:
+    np.random.seed(args.seed)
 
 img = mpimg.imread(args.path)
 
@@ -14,7 +19,7 @@ img = mpimg.imread(args.path)
 #we need to normalise values if any are >1
 
 if np.max(img) > 1: 
-    img = img/np.max(img)
+    img = img/255
 
 def build_markov_from_channel(array):
     """
